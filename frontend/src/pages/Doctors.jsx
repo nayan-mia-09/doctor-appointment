@@ -4,6 +4,7 @@ import { AppContext } from '../context/AppContext';
 
 const Doctors = () => {
   const [filterDoc, setFilterDoc] = useState([])
+  const [showFilter, setShowFilter] = useState(false)
 
   const {speciality} = useParams();
   const {doctors} = useContext(AppContext)
@@ -21,10 +22,11 @@ const Doctors = () => {
    applyFilter()
   },[doctors,speciality])
   return (
-    <div>
-      <p className='text-gray-600'>Browse through the doctors specialist.</p>
-      <div className='flex flex-col sm:flex-row items-start gap-5 mt-5'>
-        <div className='flex flex-col gap-4 text-sm text-gray-600'>
+    <div className='px-4 sm:px-6 md:px-10 lg:px-16'>
+      <p className='text-gray-600 text-sm sm:text-base md:text-lg text-center sm:text-left'>Browse through the doctors specialist.</p>
+      <div className='flex flex-col sm:flex-row items-start gap-5 mt-5 px-4 sm:px-6 md:px-10 lg:px-16'>
+        <button  className={`py-2 px-4 border rounded text-sm font-medium sm:hidden w-full sm:w-auto ${showFilter ? 'bg-pink-400 text-white' : ''}`} onClick={()=>setShowFilter(prev => ! prev)}>Filters</button>
+        <div className={`flex flex-col gap-3 sm:gap-4 text-sm text-gray-600 w-full sm:w-auto ${showFilter ? 'flex' : 'hidden sm:flex'}`}>
          <p onClick={()=> speciality === 'General physician' ? navigate('/doctors'): navigate('/doctors/General physician')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-pink-300 rounded transition-all cursor-pointer ${speciality ==="General physician"?"bg-pink-200 text-black":""}`}>General physician</p>
         <p onClick={()=> speciality === 'Gynecologist' ? navigate('/doctors'): navigate('/doctors/Gynecologist')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-pink-300 rounded transition-all cursor-pointer ${speciality ==="Gynecologist"?"bg-pink-200 text-black":""}`}>Gynecologist</p>
         <p onClick={()=> speciality === 'Dermatologist' ? navigate('/doctors'): navigate('/doctors/Dermatologist')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-pink-300 rounded transition-all cursor-pointer ${speciality ==="Dermatologist"?"bg-pink-200 text-black":""}`}>Dermatologist</p>
@@ -32,11 +34,11 @@ const Doctors = () => {
         <p onClick={()=> speciality === 'Neurologist' ? navigate('/doctors'): navigate('/doctors/Neurologist')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-pink-300 rounded transition-all cursor-pointer ${speciality ==="Neurologist"?"bg-pink-200 text-black":""}`}>Neurologist</p>
         <p onClick={()=> speciality === 'Gastroenterologist' ? navigate('/doctors'): navigate('/doctors/Gastroenterologist')} className={`w-[94vw] sm:w-auto pl-3 py-1.5 pr-16 border border-pink-300 rounded transition-all cursor-pointer ${speciality ==="Gastroenterologist"?"bg-pink-200 text-black":""}`}>Gastroenterologist</p>
         </div>
-        <div className='w-full grid grid-cols-4 gap-4 gap-y-6'>
+        <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6'>
         {
           filterDoc.map((item, index)=>(
             <div onClick={()=>navigate(`/appointment/${item._id}`)} key={index} className='border border-pink-200 rounded-xl overflow-hidden cursor-pointer hover:translate-2.5 transition-all duration-500'>
-                <img className='bg-pink-50' src={item.image} alt="" />
+                <img className='bg-pink-50 w-full' src={item.image} alt="" />
                 <div className='p-4'>
                     <div className='flex items-center gap-2 text-sm text-center text-green-500'>
                          <p className='w-2 h-2 bg-green-500 rounded-full'></p><p>Available</p>

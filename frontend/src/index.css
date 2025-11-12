@@ -13,3 +13,9 @@
     @apply hidden
 }
 
+@media (max-width:740px) {
+.active p{
+    @apply bg-pink-400 text-white
+}
+    
+}
