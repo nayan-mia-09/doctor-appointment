@@ -54,10 +54,21 @@ const AddDoctor = () => {
 
     if(data.success){
       toast.success(data.message)
+      setDocImg(false)
+      setName('')
+      setPassword('')
+      setEmail('')
+      setAddress1('')
+      setAddress2('')
+      setDegree('')
+      setAbout('')
+      setFees('')
+
     }else{
       toast.error(data.message)
     }
    } catch (error) {
+    toast.error(error.message)
     
    }
 
@@ -150,7 +161,7 @@ const AddDoctor = () => {
              <textarea onChange={(e)=>setAbout(e.target.value)} value={about} className='w-full px-4 border rounded' placeholder='write about doctor' rows={5} required/>
            </div>
 
-           <button type='submit' className='bg-pink-400 px-10 py-3 mt-4 text-white rounded-full'>Add Doctor</button>
+           <button type='submit' className='bg-pink-400 px-10 py-3 mt-4 text-white rounded-full cursor-pointer'>Add Doctor</button>
 
     </div>
 
