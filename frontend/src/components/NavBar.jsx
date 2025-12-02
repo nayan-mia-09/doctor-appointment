@@ -1,12 +1,20 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import {assets} from '../assets/assets'
+import { AppContext } from '../context/AppContext';
 
 
 const NavBar = () => {
     const navigate = useNavigate();
+
+    const {token, setToken} = useContext(AppContext)
+
     const [showMenu, setShowMenu] = useState(false);
-    const [token, setToken] = useState(true);
+
+    const logout = () =>{
+      setToken('')
+      localStorage.removeItem('token')
+    }
   return (
     <div className='flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400'>
       <h1 onClick={()=>navigate('/')} className='text-3xl font-bold cursor-pointer text-pink-500'>PusleCare</h1>
@@ -37,7 +45,7 @@ const NavBar = () => {
                     <div className='min-w-48 bg-pink-100 rounded flex flex-col gap-4 p-4'>
                         <p onClick={()=>navigate('/my-profile')} className='hover:text-pink-300 cursor-pointer'>My Profile</p>
                         <p onClick={()=>navigate('/my-appointments')} className='hover:text-pink-300 cursor-pointer'>My Appointments</p>
-                        <p onClick={()=>setToken(false)} className='hover:text-pink-300 cursor-pointer'>Logout</p>
+                        <p onClick={logout} className='hover:text-pink-300 cursor-pointer'>Logout</p>
                     </div>
                 </div>
             </div> : <button onClick={()=>navigate('/login')} className='bg-pink-500 text-white px-8 py-3 rounded-full font-light hidden md:block cursor-pointer'>Create account</button>
