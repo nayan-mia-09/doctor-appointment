@@ -87,15 +87,26 @@ const getProfile = async (req,res) =>{
 
 const updateProfile = async (req,res) =>{
     try {
-
-        const { userId, name, phone, address, dob, gender } = req.body
+        
+        const userId = req.userId  // Get from middleware, not req.body
+        const { name, phone, address, dob, gender } = req.body
         const imageFile = req.file
 
         if(!name || !phone || !dob || !gender){
             return res.json({success:false,message:"Data Missing"})
         }
         
-        await userModel.findByIdAndUpdate(userId,{name,phone,address:JSON.parse(address),dob,gender})
+        // Parse address safely
+        let parsedAddress = {line1:"", line2:""}
+        if(address){
+            try {
+                parsedAddress = typeof address === 'string' ? JSON.parse(address) : address
+            } catch (e) {
+                console.log("Address parse error:", e)
+            }
+        }
+        
+        await userModel.findByIdAndUpdate(userId,{name,phone,address:parsedAddress,dob,gender})
 
         if(imageFile){
             // upload image to cloudinary
