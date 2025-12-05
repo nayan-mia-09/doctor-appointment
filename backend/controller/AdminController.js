@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { v2 as cloudinary } from "cloudinary";
 import doctorsModel from "../models/DoctorsModel.js";
 import jwt from 'jsonwebtoken'
+import appointmentModel from "../models/appointmentModel.js";
 
 // Api for adding doctors
 
@@ -120,4 +121,46 @@ const allDoctors = async (req,res) =>{
   }
 
 }
-export { addDoctor, loginAdmin , allDoctors};
+
+// API to get all Appointments list
+
+const appointmentsAdmin = async (req,res)=>{
+  try {
+    
+    const appointments = await appointmentModel.find({})
+    res.json({success:true,appointments})
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+}
+
+// API for appointment Cancellation 
+const appointmentCancel = async (req,res) =>{
+    try {
+        const { appointmentId} = req.body
+        
+        const appointmentData = await appointmentModel.findById(appointmentId)
+
+
+
+        await appointmentModel.findByIdAndUpdate(appointmentId,{cancelled:true})
+
+        // releasing doctor slot
+        const {docId, slotDate, slotTime} = appointmentData
+        const doctorData = await doctorsModel.findById(docId)
+
+        let slots_booked = doctorData.slots_booked
+
+        slots_booked[slotDate] = slots_booked[slotDate].filter(e=> e !== slotTime)
+
+        await doctorsModel.findByIdAndUpdate(docId,{slots_booked})
+
+        res.json({success:true,message:"Appointment Cancelled"})
+    } catch (error) {
+     console.log(error);
+    res.json({ success: false, message: error.message });
+    }
+
+}
+export { addDoctor, loginAdmin , allDoctors, appointmentsAdmin, appointmentCancel};
