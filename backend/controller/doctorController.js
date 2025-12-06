@@ -1,6 +1,7 @@
 import doctorModel from "../models/DoctorsModel.js";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import appointmentModel from "../models/appointmentModel.js";
 
 
 const changeAvailablity = async (req,res)=>{
@@ -54,4 +55,63 @@ const doctorLogin = async (req,res) =>{
     }
 }
 
-export {changeAvailablity, doctorList, doctorLogin}
+// API to get doctor appointments for doctor panel
+
+const appointmentsDoctor = async (req, res) => {
+  try {
+    const docId = req.docId; // read from middleware
+    const appointments = await appointmentModel.find({ docId });
+    return res.json({ success: true, appointments });
+  } catch (error) {
+    console.log(error);
+    return res.json({ success: false, message: error.message });
+  }
+};
+
+
+// API to mark appointment completed for doctor panel
+
+const appointmentComplete = async (req,res)=>{
+    try {
+        const {appointmentId} = req.body
+        const docId = req.docId; // read from middleware
+
+        const appointmentData = await appointmentModel.findById(appointmentId)
+
+        if(appointmentData && appointmentData.docId === docId){
+            await appointmentModel.findByIdAndUpdate(appointmentId,{isCompleted:true})
+            return res.json({success:true,message:"Appointment Completed"})
+        }else{
+            return res.json({success:false,message:"Mark Failed"})
+        }
+
+    } catch (error) {
+     console.log(error);
+    return res.json({ success: false, message: error.message });
+    }
+}
+
+// API to cancel appointment  for doctor panel
+
+const appointmentCancel = async (req,res)=>{
+    try {
+        const {appointmentId} = req.body
+        const docId = req.docId; // read from middleware
+
+        const appointmentData = await appointmentModel.findById(appointmentId)
+
+        if(appointmentData && appointmentData.docId === docId){
+            await appointmentModel.findByIdAndUpdate(appointmentId,{cancelled:true})
+            return res.json({success:true,message:"Appointment Cancelled"})
+        }else{
+            return res.json({success:false,message:"Cancellation Failed"})
+        }
+
+    } catch (error) {
+     console.log(error);
+    return res.json({ success: false, message: error.message });
+    }
+}
+
+
+export {changeAvailablity, doctorList, doctorLogin, appointmentsDoctor, appointmentCancel,appointmentComplete}
