@@ -17,8 +17,8 @@ const TopDoctors = () => {
             <div onClick={()=>{navigate(`/appointment/${item._id}`);scrollTo(0,0)}} key={index} className='border border-pink-200 rounded-xl overflow-hidden cursor-pointer hover:translate-2.5 transition-all duration-500'>
                 <img className='bg-pink-50 w-full' src={item.image} alt="" />
                 <div className='p-4'>
-                    <div className='flex items-center gap-2 text-sm text-center text-green-500'>
-                         <span className={`w-2 h-2 ${item.available ? 'bg-green-500' : 'bg-black'} rounded-full`}></span><p>Available</p>
+                    <div className={`flex items-center gap-2 text-sm text-center ${item.available ? 'text-green-500' : 'text-gray-600'} `}>
+                         <span className={`w-2 h-2 ${item.available ? 'bg-green-500' : 'bg-gray-600'} rounded-full`}></span><p>{item.available ? "Available": "Not Available"}</p>
                     </div>
                 </div>
                 <p className='text-gray-900 text-lg font-medium ms-4'>{item.name}</p>

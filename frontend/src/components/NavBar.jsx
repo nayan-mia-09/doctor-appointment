@@ -37,20 +37,84 @@ const NavBar = () => {
         </NavLink>
       </ul>
       <div className='flex items-center gap-4'>
-        {
-            token && userData
-             ? <div className='flex items-center gap-2 cursor-pointer group relative'>
-                <img className='w-8 rounded-full' src={userData.image} alt="" />
-                <img className='w-2.5' src={assets.dropdown_icon} alt="" />
-                <div className='absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20 hidden group-hover:block '>
-                    <div className='min-w-48 bg-pink-100 rounded flex flex-col gap-4 p-4'>
-                        <p onClick={()=>navigate('/my-profile')} className='hover:text-pink-300 cursor-pointer'>My Profile</p>
-                        <p onClick={()=>navigate('/my-appointments')} className='hover:text-pink-300 cursor-pointer'>My Appointments</p>
-                        <p onClick={logout} className='hover:text-pink-300 cursor-pointer'>Logout</p>
-                    </div>
-                </div>
-            </div> : <button onClick={()=>navigate('/login')} className='bg-pink-500 text-white px-8 py-3 rounded-full font-light hidden md:block cursor-pointer'>Create account</button>
+       {
+  token && userData ? (
+    <div
+      className="flex items-center gap-2 cursor-pointer group relative"
+
+      // Desktop hover
+      onMouseEnter={() => {
+        if (window.innerWidth > 768) setShowMenu(true);
+      }}
+      onMouseLeave={() => {
+        if (window.innerWidth > 768) setShowMenu(false);
+      }}
+
+      // Mobile click toggle
+      onClick={() => {
+        if (window.innerWidth <= 768) {
+          setShowMenu(prev => !prev);
         }
+      }}
+    >
+      {/* Profile image */}
+      <img className="w-8 rounded-full" src={userData.image} alt="" />
+
+      {/* Dropdown icon */}
+      <img className="w-2.5" src={assets.dropdown_icon} alt="" />
+
+      {/* Dropdown Menu */}
+      <div
+        className={`absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20 
+        ${window.innerWidth > 768 ? "hidden group-hover:block" : ""}
+      `}
+      >
+        {/* Mobile: showMenu controls visibility */}
+        {(window.innerWidth > 768 || showMenu) && (
+          <div className="min-w-48 bg-pink-100 rounded flex flex-col gap-4 p-4 shadow-lg border">
+            <p
+              onClick={() => {
+                navigate("/my-profile");
+                setShowMenu(false);
+              }}
+              className="hover:text-pink-300 cursor-pointer"
+            >
+              My Profile
+            </p>
+
+            <p
+              onClick={() => {
+                navigate("/my-appointments");
+                setShowMenu(false);
+              }}
+              className="hover:text-pink-300 cursor-pointer"
+            >
+              My Appointments
+            </p>
+
+            <p
+              onClick={() => {
+                logout();
+                setShowMenu(false);
+              }}
+              className="hover:text-pink-300 cursor-pointer"
+            >
+              Logout
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  ) : (
+    <button
+      onClick={() => navigate("/login")}
+      className="bg-pink-500 text-white px-8 py-3 rounded-full font-light hidden md:block cursor-pointer"
+    >
+      Create account
+    </button>
+  )
+}
+
         <img onClick={()=>setShowMenu(true)} className='w-6 md:hidden' src={assets.menu_icon} alt="" />
         {/*   Mobile menu*/ }
         <div className={`${showMenu? 'fixed w-full': 'h-0 w-0'} md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all`}>
