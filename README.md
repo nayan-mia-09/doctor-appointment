@@ -125,12 +125,15 @@ npm run dev
 
 ## 🌍 Environment Variables
 
-```
-MONGO_URI=
-JWT_SECRET=
-CLOUDINARY_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_SECRET_KEY=
+Create a `.env` file inside the **backend** folder and add the following variables:
+
+```env
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+
+CLOUDINARY_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_SECRET_KEY=your_cloudinary_secret_key
 ```
 
 ---
